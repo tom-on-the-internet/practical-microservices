@@ -35,3 +35,20 @@ Create a migration
 ```sh
 migrate create -ext sql -dir db/migrations create_videos_table
 ```
+
+Run app
+
+```
+APP_NAME='Video Tutorials' DB='postgres://postgres:password\localhost:5432/practical_microservices' MESSAGE_STORE_DB='postgres://postgres:password\localhost:5433/message_store?search_path=message_store' PORT=3000 ./video-tutorials
+``
+
+Run app and watch (requires modd)
+
+```
+
+modd
+
+```
+
+
+```

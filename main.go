@@ -6,6 +6,6 @@ import (
 
 func main() {
 	a := app.New()
-	a.InitDB()
+	a.InitDBs()
 	a.Start()
 }

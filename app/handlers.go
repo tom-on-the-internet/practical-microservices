@@ -39,7 +39,7 @@ func (a *App) handlerHome() http.HandlerFunc {
 	}
 }
 
-// Handles static files, like CSS
+// Handles static files, like CSS.
 func (a *App) handlerStatic() http.HandlerFunc {
 	staticFS := http.FS(staticFiles)
 	fs := http.FileServer(staticFS)

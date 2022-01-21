@@ -13,13 +13,15 @@ type App struct {
 	template *template.Template
 	env      env
 	db       db
+	msgStore messageStore
 }
 
 type env struct {
-	dbConnStr string
-	port      string
-	appEnv    string
-	appName   string
+	dbConnStr       string
+	msgStoreConnStr string
+	port            string
+	appEnv          string
+	appName         string
 }
 
 //go:embed templates
@@ -39,6 +41,11 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) Start() {
+	// msg, _ := newMessage("SOME TYPE", "{}", "{}")
+	// err := a.msgStore.write("SOME NAME", msg, -1)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 	log.Println("📡 Listening on port " + a.env.port)
 	log.Fatal(http.ListenAndServe(":"+a.env.port, a))
 }
@@ -59,6 +66,11 @@ func newEnv() env {
 	e.dbConnStr = os.Getenv("DB")
 	if e.dbConnStr == "" {
 		panic("DB missing from env")
+	}
+
+	e.msgStoreConnStr = os.Getenv("MESSAGE_STORE_DB")
+	if e.msgStoreConnStr == "" {
+		panic("MESSAGE_STORE_DB missing from env")
 	}
 
 	e.appName = os.Getenv("APP_NAME")
