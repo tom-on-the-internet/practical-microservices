@@ -29,6 +29,30 @@ func (db *db) queryHomeViewData() (int, error) {
 	return count, nil
 }
 
+func (db *db) incrementVideosWatched(globalPosition int) error {
+	query := `
+      UPDATE
+        pages
+      SET
+        page_data = jsonb_set(
+          jsonb_set(
+            page_data,
+            '{videosWatched}',
+            ((page_data ->> 'videosWatched')::int + 1)::text::jsonb
+          ),
+          '{lastViewProcessed}',
+          :globalPosition::text::jsonb
+        )
+      WHERE
+        page_name = 'home' AND
+        (page_data->>'lastViewProcessed')::int < :globalPosition
+    `
+
+	_, _ = db.pool.Exec(context.Background(), query, globalPosition)
+
+	return nil
+}
+
 func (msgStore *messageStore) write(streamName string, msg message, expectedVersion int) error {
 	query := "SELECT message_store.write_message($1, $2, $3, $4, $5, $6)"
 
